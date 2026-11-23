@@ -2,6 +2,9 @@
 
 **Tuesday2-0.12B**（内部代号 V8.5_DPO_v3）是 Tuesday 系列自研中文对话模型的第二代旗舰版本：从零预训练（零依赖纯 PyTorch 训练栈，非微调任何第三方模型）+ 三阶段 SFT 配方 + 自采样偏好 DPO 精修，在 200 题标准评测中取得 **55.5%** 的系列历史最高分。
 [v7版本](https://github.com/weekday-lab/Tuesday-0.1B-v7)
+[模型地址](https://modelscope.cn/models/Weekday-Lab/Tuesday2-0.12B),提申请下载。
+[开源github地址](https://github.com/weekday-lab/Tuesday2-0.12B)不包含模型。
+
 
 ---
 ## 0. 声明
