@@ -1,0 +1,5 @@
+# Tuesday2-0.12B FP16 压缩版 Gradio 体验页依赖
+# torch 单独在 Dockerfile 里以 CPU 版安装（减小镜像体积）
+transformers>=5.0,<6
+gradio==5.34.1
+safetensors>=0.4.0
