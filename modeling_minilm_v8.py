@@ -100,9 +100,24 @@ class MiniLMV8RotaryEmbedding(nn.Module):
     def forward(self, x: torch.Tensor, position_ids: torch.Tensor):
         need = int(position_ids.max().item()) + 1
         cos = self.cos_cached
-        if (cos.numel() == 0 or cos.is_meta or cos.device != x.device
-                or need > self.max_seq_len_cached
-                or getattr(self, "_built_on", "?") != str(x.device)):  # 外推 / meta / to_empty 垃圾值：重建
+        # 内容抽查：to_empty 物化的 buffer 可能是 NaN/垃圾，也可能是恰好清零的
+        # 内存页——全零缓存同样会让 RoPE 失效（位置盲→复读退化），且能骗过
+        # 「isfinite + |cos|<=1」这类值域检查。所以直接对照 RoPE 数学定义
+        # 抽查第 1 行：cos[p,k]=cos(p*inv_freq[k])，p=1 时
+        # cos[1,0]=cos(1)≈0.540302、sin[1,0]=sin(1)≈0.841471，
+        # cos[1,1]=cos(inv_freq[1])=cos(base^(-2/head_dim))。不符即重建。
+        cache_ok = False
+        if (cos.numel() and not cos.is_meta and cos.device == x.device
+                and need <= self.max_seq_len_cached
+                and self.sin_cached.numel() == cos.numel()):
+            f1 = self.base ** (-2.0 / self.head_dim)  # inv_freq[1]
+            cache_ok = (
+                abs(float(cos[1, 0]) - math.cos(1.0)) < 1e-3
+                and abs(float(self.sin_cached[1, 0]) - math.sin(1.0)) < 1e-3
+                and abs(float(cos[1, 1]) - math.cos(f1)) < 1e-3
+            )
+        if (not cache_ok or cos.device != x.device
+                or need > self.max_seq_len_cached):  # 外推 / meta / 物化垃圾：重建
             self._build_cache(max(need, self.max_seq_len_cached), x.device)
         cos = self.cos_cached[position_ids].to(x.dtype)
         sin = self.sin_cached[position_ids].to(x.dtype)
