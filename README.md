@@ -4,7 +4,7 @@
 
 [v7版本](https://github.com/weekday-lab/Tuesday-0.1B-v7)
 
-[模型地址](https://modelscope.cn/models/Weekday-Lab/Tuesday2-0.12B),提申请下载。
+[模型地址](https://modelscope.cn/models/Weekday-Lab/Tuesday2-0.12B),提申请下载，也可在线体验[modelscope](https://modelscope.cn/studios/Weekday-Lab/Tuesday2-0.12B)
 
 [开源github地址](https://github.com/weekday-lab/Tuesday2-0.12B)不包含模型。
 
