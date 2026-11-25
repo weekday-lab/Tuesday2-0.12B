@@ -114,3 +114,14 @@ print(tok.decode(out[0][ids.input_ids.shape[1]:], skip_special_tokens=True))
 
 - 模型权重与随包代码仅供研究使用；上游数据集许可见第 3.2 节。
 - 版本：Tuesday2-0.12B = V8.5_DPO_v3（checkpoint: sft_v85_dpo3，2026-11-20 定版）。
+
+## 8. 引用
+
+```bibtex
+@misc{tuesday2_0_12b,
+  title  = {Tuesday2-0.12b: a 120M-parameter Chinese causal language model},
+  author = {Tuesday2-0.12b contributors},
+  year   = {2026},
+  note   = {Model version V8}
+}
+```
